@@ -3,7 +3,7 @@
 
 ## Get started 
 ### Install the ESP32 SDK
-1. Get base projects: `git clone --recurse-submodules https://github.com/littlevgl/esp32_ili9341.git`
+1. Get base projects: `git clone --recursive https://github.com/bigw00d/esp-idf-littlevgl-sample.git`
 
 ### Add LittlevGL to the build
 To link LittlevGL (lvgl) and lv_examples with ESP-IDF you need to add a **component.mk** file to each directory.
