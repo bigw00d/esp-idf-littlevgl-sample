@@ -46,10 +46,10 @@
 #endif
 
 /*MCU and memory usage monitoring*/
-#define LV_USE_SYSMON      0
+#define LV_USE_SYSMON      1
 
 /*A terminal to display received characters*/
-#define LV_USE_TERMINAL    0
+#define LV_USE_TERMINAL    1
 
 /*Touch pad calibration with 4 points*/
 #define LV_USE_TPCAL       0
@@ -57,4 +57,3 @@
 #endif /*LV_EX_CONF_H*/
 
 #endif /*End of "Content enable"*/
-
