@@ -21,8 +21,7 @@
 /*******************
  *   TEST USAGE
  *******************/
-#define LV_USE_TESTS        0
-
+#define LV_USE_TESTS        1
 /*******************
  * TUTORIAL USAGE
  *******************/
