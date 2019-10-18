@@ -19,6 +19,8 @@
 #include "lv_examples/lv_apps/sysmon/sysmon.h" //+:daiki
 #include "lv_examples/lv_apps/terminal/terminal.h" //+:daiki
 #include "lv_examples/lv_tests/lv_test_objx/lv_test_bar/lv_test_bar.h" //+:daiki
+#include "lv_examples/lv_tests/lv_test_theme/lv_test_theme_1.h" //+:daiki
+#include "lvgl/src/lv_themes/lv_theme.h" //+:daiki
 
 #include "esp_freertos_hooks.h"
 
@@ -212,9 +214,94 @@ void my_test_bar_1(void)
     lv_obj_align(bar5, bar4, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
 }
 
+// refer : https://tr.pinterest.com/5eyyah/uiux-littlevgl/
+void my_test_theme(void)
+{
+	//example 1
+	// lv_theme_t * th = lv_theme_night_init(210, &lv_font_dejavu_40);
+	// lv_theme_t * th = lv_theme_night_init(210, &lv_font_roboto_28);
+	// lv_theme_t * th = lv_theme_night_init(210, &lv_font_roboto_16);
+	// lv_theme_set_current(th);
+
+	//example 2
+	// /*Create a default slider*/
+	// lv_obj_t *slider = lv_slider_create(lv_scr_act(), NULL);
+	// lv_slider_set_value(slider, 70,  LV_ANIM_OFF);
+	// lv_obj_set_pos(slider, 10, 10);
+	//
+	// /*Initialize the alien theme with a reddish hue*/
+	// lv_theme_t *th = lv_theme_alien_init(10, NULL);
+	//
+	// /*Create a new slider and apply the themes styles*/
+	// slider = lv_slider_create(lv_scr_act(), NULL);
+	// lv_slider_set_value(slider, 70,  LV_ANIM_OFF);
+	// lv_obj_set_pos(slider, 10, 50);
+
+	// example2
+
+	// lv_theme_t *theme = lv_theme_zen_init(10, NULL);
+	lv_theme_t *theme = lv_theme_alien_init(10, NULL);
+	lv_theme_set_current(theme);
+
+	// base object
+	lv_obj_t * obj1;
+	obj1 = lv_obj_create(lv_scr_act(), NULL);
+	lv_obj_set_size(obj1, 320, 240);
+	// lv_style_plain_color.text.color      = lv_color_make(0xf0, 0xf0, 0xf0);
+	// lv_style_plain_color.image.color     = lv_color_make(0xf0, 0xf0, 0xf0);
+	// lv_style_plain_color.line.color      = lv_color_make(0xf0, 0xf0, 0xf0);
+	// lv_style_plain_color.body.main_color = lv_color_make(0x55, 0x96, 0xd8);
+	// lv_style_plain_color.body.grad_color = lv_style_plain_color.body.main_color;
+	lv_style_plain_color.body.main_color = LV_COLOR_BLACK;
+	lv_style_plain_color.body.grad_color = LV_COLOR_BLACK;
+	lv_obj_set_style(obj1, &lv_style_plain_color);
+	lv_obj_align(obj1, NULL, LV_ALIGN_CENTER, 0, 0);
+
+	/* Create the background for the whole project */
+	lv_obj_t * background = lv_obj_create(lv_scr_act(), NULL);
+	lv_obj_set_size(background, 320, 240);
+	lv_obj_set_pos(background, 0, 0);
+}
+
+// #define LV_COLOR_WHITE LV_COLOR_MAKE(0xFF, 0xFF, 0xFF)
+// #define LV_COLOR_SILVER LV_COLOR_MAKE(0xC0, 0xC0, 0xC0)
+// #define LV_COLOR_GRAY LV_COLOR_MAKE(0x80, 0x80, 0x80)
+// #define LV_COLOR_BLACK LV_COLOR_MAKE(0x00, 0x00, 0x00)
+// #define LV_COLOR_RED LV_COLOR_MAKE(0xFF, 0x00, 0x00)
+// #define LV_COLOR_MAROON LV_COLOR_MAKE(0x80, 0x00, 0x00)
+// #define LV_COLOR_YELLOW LV_COLOR_MAKE(0xFF, 0xFF, 0x00)
+// #define LV_COLOR_OLIVE LV_COLOR_MAKE(0x80, 0x80, 0x00)
+// #define LV_COLOR_LIME LV_COLOR_MAKE(0x00, 0xFF, 0x00)
+// #define LV_COLOR_GREEN LV_COLOR_MAKE(0x00, 0x80, 0x00)
+// #define LV_COLOR_CYAN LV_COLOR_MAKE(0x00, 0xFF, 0xFF)
+// #define LV_COLOR_AQUA LV_COLOR_CYAN
+// #define LV_COLOR_TEAL LV_COLOR_MAKE(0x00, 0x80, 0x80)
+// #define LV_COLOR_BLUE LV_COLOR_MAKE(0x00, 0x00, 0xFF)
+// #define LV_COLOR_NAVY LV_COLOR_MAKE(0x00, 0x00, 0x80)
+// #define LV_COLOR_MAGENTA LV_COLOR_MAKE(0xFF, 0x00, 0xFF)
+// #define LV_COLOR_PURPLE LV_COLOR_MAKE(0x80, 0x00, 0x80)
+// #define LV_COLOR_ORANGE LV_COLOR_MAKE(0xFF, 0xA5, 0x00)
+
+LV_IMG_DECLARE(img_bubble_pattern)
 
 void my_test_temperature(void)
 {
+
+		// wallpaper
+		lv_coord_t hres = lv_disp_get_hor_res(NULL);
+		lv_coord_t vres = lv_disp_get_ver_res(NULL);
+
+		lv_obj_t * wp = lv_img_create(lv_disp_get_scr_act(NULL), NULL);
+		lv_img_set_src(wp, &img_bubble_pattern);
+		lv_obj_set_width(wp, hres * 4);
+		lv_obj_set_protect(wp, LV_PROTECT_POS);
+
+		// base object
+		// lv_obj_t * obj1;
+		// obj1 = lv_obj_create(lv_scr_act(), NULL);
+		// lv_obj_set_size(obj1, 100, 50);
+		// lv_obj_set_style(obj1, &lv_style_plain_color);
+		// lv_obj_align(obj1, NULL, LV_ALIGN_CENTER, -60, -30);
 
 		// bar
 
@@ -316,7 +403,9 @@ void app_main()
 	// demoLmeter(); //+:daiki
 	// demoGauge(); //+:daiki
 	// my_test_bar_1(); //+:daiki
-	my_test_temperature(); //+:daiki
+	// my_test_temperature(); //+:daiki
+	// lv_test_theme_1(lv_theme_night_init(15, NULL)); //+:daiki
+	my_test_theme(); //+:daiki
 
 	while(1) {
 		vTaskDelay(1);
