@@ -153,7 +153,7 @@ typedef void * lv_fs_drv_user_data_t;
 #endif
 
 /*1: Add a `user_data` to drivers and objects*/
-#define LV_USE_USER_DATA        0
+#define LV_USE_USER_DATA        1
 
 /*========================
  * Image decoder and cache
@@ -256,7 +256,7 @@ typedef void * lv_indev_drv_user_data_t;            /*Type of user data in the i
 
 /* Robot fonts with bpp = 4
  * https://fonts.google.com/specimen/Roboto  */
-#define LV_FONT_ROBOTO_12    0
+#define LV_FONT_ROBOTO_12    1
 #define LV_FONT_ROBOTO_16    1
 #define LV_FONT_ROBOTO_22    0
 #define LV_FONT_ROBOTO_28    1

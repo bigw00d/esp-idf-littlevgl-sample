@@ -164,7 +164,7 @@ void lv_test_tabview_2(void)
     lv_tabview_add_tab(tv2, "111");
     lv_tabview_add_tab(tv2, "222");
     lv_tabview_add_tab(tv2, "333");
-    lv_tabview_add_tab(tv2, "444");        
+    lv_tabview_add_tab(tv2, "444");
 
     tab = lv_tabview_get_tab(tv2, 0);
     label = lv_label_create(tab, NULL);
@@ -191,7 +191,7 @@ void lv_test_tabview_2(void)
     lv_tabview_add_tab(tv3, "111");
     lv_tabview_add_tab(tv3, "222");
     lv_tabview_add_tab(tv3, "333");
-    lv_tabview_add_tab(tv3, "444");        
+    lv_tabview_add_tab(tv3, "444");
 
     tab = lv_tabview_get_tab(tv3, 0);
     label = lv_label_create(tab, NULL);
@@ -218,7 +218,7 @@ void lv_test_tabview_2(void)
     lv_tabview_add_tab(tv4, "111");
     lv_tabview_add_tab(tv4, "222");
     lv_tabview_add_tab(tv4, "333");
-    lv_tabview_add_tab(tv4, "444");        
+    lv_tabview_add_tab(tv4, "444");
 
     tab = lv_tabview_get_tab(tv4, 0);
     label = lv_label_create(tab, NULL);
