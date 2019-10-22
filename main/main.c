@@ -332,6 +332,7 @@ void lv_ex_tabview_1(void)
 
 		static lv_style_t *pStyle_tv_btn_rel; //button release style
 		pStyle_tv_btn_rel = lv_tabview_get_style(tabview, LV_TABVIEW_STYLE_BTN_REL);
+		pStyle_tv_btn_rel->text.font = &lv_font_roboto_16;
 		pStyle_tv_btn_rel->body.padding.left   = LV_DPI / PADDING_RATE;
     pStyle_tv_btn_rel->body.padding.right  = LV_DPI / PADDING_RATE;
     pStyle_tv_btn_rel->body.padding.top    = LV_DPI / PADDING_RATE;
@@ -518,6 +519,7 @@ void my_test_temperature(void)
 		pStyle_tv_btn_rel->body.padding.right  = LV_DPI / PADDING_RATE;
 		pStyle_tv_btn_rel->body.padding.top    = LV_DPI / PADDING_RATE;
 		pStyle_tv_btn_rel->body.padding.bottom = LV_DPI / PADDING_RATE;
+		pStyle_tv_btn_rel->text.font = &lv_font_roboto_12;
 
 		static lv_style_t indic;
 		lv_style_copy(&indic, &lv_style_plain);
@@ -527,9 +529,9 @@ void my_test_temperature(void)
 		lv_tabview_set_style(tabview, LV_TABVIEW_STYLE_INDIC, &indic);
 
 		/*Add 3 tabs (the tabs are page (lv_page) and can be scrolled*/
-    lv_obj_t *tab1 = lv_tabview_add_tab(tabview, "Tab 1");
-    lv_obj_t *tab2 = lv_tabview_add_tab(tabview, "Tab 2");
-    lv_obj_t *tab3 = lv_tabview_add_tab(tabview, "Tab 3");
+    lv_obj_t *tab1 = lv_tabview_add_tab(tabview, "air cond");
+    lv_obj_t *tab2 = lv_tabview_add_tab(tabview, "gps");
+    lv_obj_t *tab3 = lv_tabview_add_tab(tabview, "weather");
 
     /*Add content to the tabs*/
     // lv_obj_t * label = lv_label_create(tab1, NULL);
@@ -547,6 +549,8 @@ void my_test_temperature(void)
 		//
     // label = lv_label_create(tab3, NULL);
     // lv_label_set_text(label, "Third tab");
+
+		// tab1
 
 		static lv_style_t bar_bg;
     lv_style_copy(&bar_bg, &lv_style_pretty);
@@ -590,6 +594,104 @@ void my_test_temperature(void)
     lv_obj_t * label1 =  lv_label_create(tab1, NULL);
     lv_label_set_text(label1, "88%");
     lv_obj_align(label1, gauge, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+
+
+		// tab2
+
+		static lv_style_t style;
+		lv_style_copy(&style, &lv_style_pretty_color);
+		// style.body.main_color = lv_color_hex3(0x666); // Line color at the beginning/
+		// style.body.grad_color = lv_color_hex3(0x666); // Line color at the end/
+		// style.body.main_color = lv_color_hex3(0xfff); // Line color at the beginning/ white
+		// style.body.grad_color = lv_color_hex3(0xfff); // Line color at the end/ white
+		style.body.main_color = LV_COLOR_GRAY; // Line color at the beginning/ gray
+		style.body.grad_color = LV_COLOR_GRAY; // Line color at the end/ gray
+		style.body.padding.left = 2; // Scale line length/
+		style.body.padding.inner = 8; // Scale label padding/
+		// style.body.border.color = lv_color_hex3(0x333); // Needle middle circle color/
+		// style.body.border.color = lv_color_hex3(0xfff); // Needle middle circle color/
+		style.body.border.color = LV_COLOR_GRAY; // Needle middle circle color/
+		//style.body.empty = 1;
+		// style.line.width = 3;
+		style.line.width = 2;
+		// style.line.color = LV_COLOR_RED; // Line color after the critical value/
+		style.line.color = LV_COLOR_GRAY; // Line color after the critical value/
+		style.text.color = lv_color_hex3(0x333);
+		style.text.opa = LV_OPA_TRANSP;
+
+		int start_gauge_x = 20; //horizontal position
+		int start_gauge_y = 30; //vertical position
+		static lv_color_t needle_colors[] = {
+			LV_COLOR_GRAY, LV_COLOR_GRAY, LV_COLOR_GRAY, LV_COLOR_GRAY, LV_COLOR_GRAY, LV_COLOR_GRAY,
+			LV_COLOR_GRAY, LV_COLOR_GRAY, LV_COLOR_GRAY, LV_COLOR_GRAY, LV_COLOR_GRAY, LV_COLOR_GRAY
+		}; // color only needle[0]
+		// needle_colors[0] = lv_color_hsv_to_rgb(90, 80, 87);
+		lv_obj_t * gauge1 = lv_gauge_create(tab2, NULL);
+		// lv_obj_set_pos(gauge1,10,30);
+		lv_gauge_set_scale(gauge1, 360, 36*2, 0); // point interval
+		lv_gauge_set_style(gauge1, LV_GAUGE_STYLE_MAIN, &style);
+		lv_gauge_set_critical_value(gauge1, 360);
+		lv_gauge_set_needle_count(gauge1, 12, needle_colors); // 12 needles
+		lv_gauge_set_range(gauge1, 0, 360);
+		lv_obj_align(gauge1, NULL, LV_ALIGN_IN_TOP_LEFT, start_gauge_x, start_gauge_y);
+		lv_obj_set_size(gauge1, 150, 150);
+		uint8_t i;
+		for(i = 0; i < 12; i++)
+		{
+			lv_gauge_set_value(gauge1, i, 30*i); // set value needle[i]
+		}
+
+		lv_obj_t * gauge2 = lv_gauge_create(tab2, NULL);
+		lv_gauge_set_scale(gauge2, 360, 36, 0); // point interval
+		lv_gauge_set_style(gauge2, LV_GAUGE_STYLE_MAIN, &style);
+		lv_gauge_set_critical_value(gauge2, 360);
+		lv_gauge_set_needle_count(gauge2, 1, needle_colors); // 1 needles
+		lv_gauge_set_range(gauge2, 0, 360);
+		lv_obj_align(gauge2, NULL, LV_ALIGN_IN_TOP_LEFT, start_gauge_x+(150/2)*(1.00-0.66), start_gauge_y+(150/2)*(1.00-0.66));
+		lv_obj_set_size(gauge2, 150*0.66, 150*0.66);
+
+		lv_obj_t * gauge3 = lv_gauge_create(tab2, NULL);
+		lv_gauge_set_scale(gauge3, 360, 36/2, 0); // point interval
+		lv_gauge_set_style(gauge3, LV_GAUGE_STYLE_MAIN, &style);
+		lv_gauge_set_critical_value(gauge3, 360);
+		lv_gauge_set_needle_count(gauge3, 1, needle_colors); // 1 needles
+		lv_gauge_set_range(gauge3, 0, 360);
+		lv_obj_align(gauge3, NULL, LV_ALIGN_IN_TOP_LEFT, start_gauge_x+(150/2)*(1.00-0.33), start_gauge_y+(150/2)*(1.00-0.33));
+		lv_obj_set_size(gauge3, 150*0.33, 150*0.33);
+
+		lv_obj_t * label_north =  lv_label_create(tab2, NULL);
+    lv_label_set_text(label_north, "N");
+    lv_obj_align(label_north, gauge1, LV_ALIGN_OUT_TOP_MID, 0, 0);
+
+		lv_obj_t * gps_symbol1 = lv_label_create(tab2, NULL);
+    lv_label_set_text(gps_symbol1, LV_SYMBOL_STOP "25");
+    lv_obj_align(gps_symbol1, NULL, LV_ALIGN_IN_TOP_LEFT, 50, 50);
+
+		lv_obj_t * gps_symbol2 = lv_label_create(tab2, NULL);
+    lv_label_set_text(gps_symbol2, LV_SYMBOL_STOP "25");
+    lv_obj_align(gps_symbol2, NULL, LV_ALIGN_IN_TOP_LEFT, 75, 150);
+
+		lv_obj_t * gps_symbol3 = lv_label_create(tab2, NULL);
+    lv_label_set_text(gps_symbol3, LV_SYMBOL_STOP "25");
+    lv_obj_align(gps_symbol3, NULL, LV_ALIGN_IN_TOP_LEFT, 100, 75);
+
+
+		/*Create a style for the LED*/
+    // static lv_style_t style_led;
+    // lv_style_copy(&style_led, &lv_style_pretty_color);
+    // style_led.body.radius = LV_RADIUS_CIRCLE;
+    // style_led.body.main_color = LV_COLOR_WHITE; //LV_COLOR_MAKE(0xb5, 0x0f, 0x04);
+    // style_led.body.grad_color = LV_COLOR_WHITE; //LV_COLOR_MAKE(0x50, 0x07, 0x02);
+    // style_led.body.border.color = LV_COLOR_WHITE; //LV_COLOR_MAKE(0xfa, 0x0f, 0x00);
+    // style_led.body.border.width = 1;
+    // style_led.body.border.opa = LV_OPA_30;
+    // // style_led.body.shadow.color = LV_COLOR_MAKE(0xb5, 0x0f, 0x04);
+    // // style_led.body.shadow.width = 5;
+		//
+		// lv_obj_t * gps_icon1  = lv_led_create(tab2, NULL);
+    // lv_obj_set_style(gps_icon1, &style_led);
+    // lv_obj_align(gps_icon1, NULL, LV_ALIGN_IN_TOP_LEFT, 50, 50);
+    // lv_led_on(gps_icon1);
 
 		// static lv_style_t bar_bg;
     // lv_style_copy(&bar_bg, &lv_style_pretty);
