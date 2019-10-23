@@ -664,17 +664,62 @@ void my_test_temperature(void)
     lv_label_set_text(label_north, "N");
     lv_obj_align(label_north, gauge1, LV_ALIGN_OUT_TOP_MID, 0, 0);
 
+		/*Create a style for the LED*/
+    static lv_style_t style_led;
+    lv_style_copy(&style_led, &lv_style_pretty_color);
+    style_led.body.radius = LV_RADIUS_CIRCLE;
+    style_led.body.main_color = LV_COLOR_WHITE;
+    style_led.body.grad_color = LV_COLOR_WHITE;
+    style_led.body.border.color = LV_COLOR_WHITE;
+    style_led.body.border.width = 1;
+    style_led.body.border.opa = LV_OPA_30;
+    style_led.body.shadow.color = LV_COLOR_MAKE(0xb5, 0x0f, 0x04);
+    style_led.body.shadow.width = 0;
+
+    // satellite1
+    lv_obj_t * led1  = lv_led_create(tab2, NULL);
+    lv_obj_set_style(led1, &style_led);
+    lv_obj_align(led1, NULL, LV_ALIGN_IN_TOP_LEFT, 50, 50);
+		lv_obj_set_size(led1, (LV_DPI / 6), (LV_DPI / 6));
+    lv_led_on(led1);
+
 		lv_obj_t * gps_symbol1 = lv_label_create(tab2, NULL);
-    lv_label_set_text(gps_symbol1, LV_SYMBOL_STOP "25");
-    lv_obj_align(gps_symbol1, NULL, LV_ALIGN_IN_TOP_LEFT, 50, 50);
+    lv_label_set_text(gps_symbol1, "26");
+    lv_obj_align(gps_symbol1, led1, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+
+		// satellite1
+    lv_obj_t * led2  = lv_led_create(tab2, NULL);
+    lv_obj_set_style(led2, &style_led);
+    lv_obj_align(led2, NULL, LV_ALIGN_IN_TOP_LEFT, 75, 150);
+		lv_obj_set_size(led2, (LV_DPI / 6), (LV_DPI / 6));
+    lv_led_on(led2);
 
 		lv_obj_t * gps_symbol2 = lv_label_create(tab2, NULL);
-    lv_label_set_text(gps_symbol2, LV_SYMBOL_STOP "25");
-    lv_obj_align(gps_symbol2, NULL, LV_ALIGN_IN_TOP_LEFT, 75, 150);
+    lv_label_set_text(gps_symbol2, "25");
+    lv_obj_align(gps_symbol2, led2, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+
+		// satellite1
+    lv_obj_t * led3  = lv_led_create(tab2, NULL);
+    lv_obj_set_style(led3, &style_led);
+    lv_obj_align(led3, NULL, LV_ALIGN_IN_TOP_LEFT, 100, 75);
+		lv_obj_set_size(led3, (LV_DPI / 6), (LV_DPI / 6));
+    lv_led_on(led3);
 
 		lv_obj_t * gps_symbol3 = lv_label_create(tab2, NULL);
-    lv_label_set_text(gps_symbol3, LV_SYMBOL_STOP "25");
-    lv_obj_align(gps_symbol3, NULL, LV_ALIGN_IN_TOP_LEFT, 100, 75);
+    lv_label_set_text(gps_symbol3, "24");
+    lv_obj_align(gps_symbol3, led3, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+
+		// lv_obj_t * gps_symbol1 = lv_label_create(tab2, NULL);
+    // lv_label_set_text(gps_symbol1, LV_SYMBOL_STOP "25");
+    // lv_obj_align(gps_symbol1, NULL, LV_ALIGN_IN_TOP_LEFT, 50, 50);
+		//
+		// lv_obj_t * gps_symbol2 = lv_label_create(tab2, NULL);
+    // lv_label_set_text(gps_symbol2, LV_SYMBOL_STOP "25");
+    // lv_obj_align(gps_symbol2, NULL, LV_ALIGN_IN_TOP_LEFT, 75, 150);
+		//
+		// lv_obj_t * gps_symbol3 = lv_label_create(tab2, NULL);
+    // lv_label_set_text(gps_symbol3, LV_SYMBOL_STOP "25");
+    // lv_obj_align(gps_symbol3, NULL, LV_ALIGN_IN_TOP_LEFT, 100, 75);
 
 		// tab3
 
@@ -783,10 +828,6 @@ void my_test_temperature(void)
     lv_label_set_text(label_level_value, " 88%");
     lv_obj_align(label_level_value, label_batt_level, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
 		lv_label_set_style(label_level_value, LV_CONT_STYLE_MAIN,  &batt_lv_style2);
-
-		lv_obj_t * batt_symbol = lv_label_create(tab3, NULL);
-    lv_label_set_text(batt_symbol, LV_SYMBOL_BATTERY_3);
-    lv_obj_align(batt_symbol, NULL, LV_ALIGN_IN_TOP_LEFT, 100, 20);
 
 		/*Create a style for the LED*/
     // static lv_style_t style_led;
