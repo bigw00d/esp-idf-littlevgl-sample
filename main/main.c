@@ -660,7 +660,7 @@ void create_gps_condition_tabview(lv_obj_t *tabview)
 	lv_led_on(led1);
 
 	lv_obj_t * gps_symbol1 = lv_label_create(tabview, NULL);
-	lv_label_set_text(gps_symbol1, "26");
+	lv_label_set_text(gps_symbol1, "2");
 	lv_obj_align(gps_symbol1, led1, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
 
 	// satellite2
@@ -671,7 +671,7 @@ void create_gps_condition_tabview(lv_obj_t *tabview)
 	lv_led_on(led2);
 
 	lv_obj_t * gps_symbol2 = lv_label_create(tabview, NULL);
-	lv_label_set_text(gps_symbol2, "25");
+	lv_label_set_text(gps_symbol2, "16");
 	lv_obj_align(gps_symbol2, led2, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
 
 	// satellite3
@@ -682,13 +682,41 @@ void create_gps_condition_tabview(lv_obj_t *tabview)
 	lv_led_on(led3);
 
 	lv_obj_t * gps_symbol3 = lv_label_create(tabview, NULL);
-	lv_label_set_text(gps_symbol3, "24");
+	lv_label_set_text(gps_symbol3, "30");
 	lv_obj_align(gps_symbol3, led3, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
 
 	// value frame
 	static message_frame_t frameObj2;
-	create_message_frame(&frameObj2, tabview, 185, 100, 120, 80); //tabview, start_x, start_y, width, height
+	create_message_frame(&frameObj2, tabview, 185, 110, 125, 90); //tabview, start_x, start_y, width, height
 
+	// value (bar)
+	static lv_style_t bar_bg;
+	lv_style_copy(&bar_bg, &lv_style_pretty);
+	bar_bg.body.main_color = lv_color_hex(0x012E43);
+	static lv_style_t bar_indic;
+	lv_style_copy(&bar_indic, &lv_style_pretty);
+	bar_indic.body.main_color = lv_color_hsv_to_rgb(90, 80, 87); //color for theme alien
+	bar_indic.body.grad_color = lv_color_hsv_to_rgb(90, 80, 87); //color for theme alien
+	bar_indic.body.shadow.color = LV_COLOR_GREEN;
+	bar_indic.body.shadow.width = 0;
+	bar_indic.body.padding.top = 0;       /*Set the padding around the indicator*/
+	bar_indic.body.padding.bottom = 0;
+	bar_indic.body.padding.left = 0;
+	bar_indic.body.padding.right = 0;
+	lv_obj_t * bar3 = lv_bar_create(tabview, NULL);
+	lv_obj_set_size(bar3, 20, 40);
+	lv_obj_set_pos(bar3, 200, 140);
+	lv_bar_set_value(bar3, 85, false); // bar, new_value, LV_ANIM_ON/OFF
+	lv_bar_set_style(bar3, LV_BAR_STYLE_BG, &bar_bg);
+	lv_bar_set_style(bar3, LV_BAR_STYLE_INDIC, &bar_indic);
+
+	// value(label)
+	lv_obj_t * label3 =  lv_label_create(tabview, NULL);
+	lv_label_set_text(label3, "2");
+	lv_obj_align(label3, bar3, LV_ALIGN_OUT_BOTTOM_MID, 0, 5); //voffset:5
+	lv_obj_t * label4 =  lv_label_create(tabview, NULL);
+	lv_label_set_text(label4, "36");
+	lv_obj_align(label4, bar3, LV_ALIGN_OUT_TOP_MID, 0, 5); //voffset:5
 }
 
 void create_message_frame(message_frame_t *obj, lv_obj_t *tabview, int start_x, int start_y, int width, int height)
@@ -704,6 +732,7 @@ void create_message_frame(message_frame_t *obj, lv_obj_t *tabview, int start_x, 
 	lv_bar_set_style(area1, LV_BAR_STYLE_BG, &(obj->area_bg));
 	lv_bar_set_value(area1, 0, false); // bar, new_value, LV_ANIM_ON/OFF
 
+	// frame line
 	obj->line_points[0].x = start_x;
 	obj->line_points[0].y = start_y;
 	obj->line_points[1].x = start_x+width;
@@ -724,41 +753,6 @@ void create_message_frame(message_frame_t *obj, lv_obj_t *tabview, int start_x, 
 	lv_line_set_points(line1, obj->line_points, 5);     /*Set the points*/
 	lv_line_set_style(line1, LV_LINE_STYLE_MAIN, &(obj->style_line));
 	lv_obj_align(line1, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
-	//
-	// // frame area
-	// static lv_style_t area_bg;
-	// lv_style_copy(&area_bg, &lv_style_pretty);
-	// area_bg.body.main_color = lv_color_hex(0x012E43);
-	// area_bg.body.grad_color = lv_color_hex(0x012E43);
-	//
-	// lv_obj_t * area1 = lv_bar_create(tabview, NULL);
-	// lv_obj_set_size(area1, width, height);
-	// lv_obj_align(area1, NULL, LV_ALIGN_IN_TOP_LEFT, start_x-5, start_y);
-	// lv_bar_set_style(area1, LV_BAR_STYLE_BG, &area_bg);
-	// lv_bar_set_value(area1, 0, false); // bar, new_value, LV_ANIM_ON/OFF
-	//
-	// static lv_point_t line_points[5];
-	// line_points[0].x = start_x;
-	// line_points[0].y = start_y;
-	// line_points[1].x = start_x+width;
-	// line_points[1].y = start_y;
-	// line_points[2].x = start_x+width;
-	// line_points[2].y = start_y+height;
-	// line_points[3].x = start_x;
-	// line_points[3].y = start_y+height;
-	// line_points[4].x = start_x;
-	// line_points[4].y = start_y;
-	//
-	// static lv_style_t style_line;
-	// lv_style_copy(&style_line, &lv_style_plain);
-	// style_line.line.color = lv_color_hex(0x02CDFF); //frame color
-	// style_line.line.width = 2;
-	// style_line.line.rounded = 1;
-	// lv_obj_t * line1;
-	// line1 = lv_line_create(tabview, NULL);
-	// lv_line_set_points(line1, line_points, 5);     /*Set the points*/
-	// lv_line_set_style(line1, LV_LINE_STYLE_MAIN, &style_line);
-	// lv_obj_align(line1, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 }
 
 void create_battery_condition_tabview(lv_obj_t *tabview)
