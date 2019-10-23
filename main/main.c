@@ -37,6 +37,10 @@ static void IRAM_ATTR lv_tick_task(void);
 
 static void tab_switcher(lv_task_t * task);
 
+lv_obj_t * gauge;
+
+#define PADDING_RATE 20
+
 void my_create() //+:daiki
 {
 	/*Create a style for the line meter*/
@@ -141,7 +145,6 @@ void demoLmeter(void)
     lv_obj_align(label1, lmeter, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
 }
 
-lv_obj_t * gauge;
 void demoGauge(void)
 {
     static lv_color_t colorArray[2] ;
@@ -286,46 +289,44 @@ void my_test_theme(void)
 // #define LV_COLOR_PURPLE LV_COLOR_MAKE(0x80, 0x00, 0x80)
 // #define LV_COLOR_ORANGE LV_COLOR_MAKE(0xFF, 0xA5, 0x00)
 
-#define PADDING_RATE 20
 
 void lv_ex_tabview_1(void)
 {
 		lv_theme_t *theme = lv_theme_alien_init(90, NULL);
 		lv_theme_set_current(theme);
 
-#if 0
-		// see basic_init() at lv_theme_alien.c
-		static lv_style_t style_tv_btn_rel; //button release style
+		// // see basic_init() at lv_theme_alien.c
+		// static lv_style_t style_tv_btn_rel; //button release style
+		//
+    // lv_style_copy(&style_tv_btn_rel, &lv_style_btn_rel);
+    // style_tv_btn_rel.text.font = &lv_font_roboto_16;
+    // /*The vertical padding of the released button is applied to all buttons*/
+		// style_tv_btn_rel.body.padding.left   = LV_DPI / PADDING_RATE;
+    // style_tv_btn_rel.body.padding.right  = LV_DPI / PADDING_RATE;
+    // style_tv_btn_rel.body.padding.top    = LV_DPI / PADDING_RATE;
+    // style_tv_btn_rel.body.padding.bottom = LV_DPI / PADDING_RATE;
+		//
+		// style_tv_btn_rel.body.main_color     = lv_color_hex3(0x222); //lv_color_make(0x76, 0xa2, 0xd0);
+    // style_tv_btn_rel.body.grad_color     = lv_color_hex3(0x222); //lv_color_make(0x19, 0x3a, 0x5d);
+    // style_tv_btn_rel.body.radius         = 0; //LV_DPI / 15;
+    // // style_tv_btn_rel.body.padding.left   = LV_DPI / 4;
+    // // style_tv_btn_rel.body.padding.right  = LV_DPI / 4;
+    // // style_tv_btn_rel.body.padding.top    = LV_DPI / 6;
+    // // style_tv_btn_rel.body.padding.bottom = LV_DPI / 20;
+    // // style_tv_btn_rel.body.padding.inner  = LV_DPI / 10;
+    // style_tv_btn_rel.body.border.color   = LV_COLOR_GRAY; //lv_color_make(0x0b, 0x19, 0x28);
+    // style_tv_btn_rel.body.border.width   = LV_DPI / 50 >= 1 ? LV_DPI / 50 : 1;
+    // style_tv_btn_rel.body.border.opa     = LV_OPA_10; //LV_OPA_70;
+    // style_tv_btn_rel.body.shadow.color   = LV_COLOR_GRAY;
+    // style_tv_btn_rel.body.shadow.width   = 0;
+    // style_tv_btn_rel.text.color          = lv_color_hex3(0xDDD); //lv_color_make(0xff, 0xff, 0xff);
+    // style_tv_btn_rel.image.color         = lv_color_hex3(0xDDD); //lv_color_make(0xff, 0xff, 0xff);
+		//
+		// /*Create a Tab view object*/
+    // lv_obj_t *tabview;
+    // tabview = lv_tabview_create(lv_scr_act(), NULL);
+		// lv_tabview_set_style(tabview, LV_TABVIEW_STYLE_BTN_REL, &style_tv_btn_rel);
 
-    lv_style_copy(&style_tv_btn_rel, &lv_style_btn_rel);
-    style_tv_btn_rel.text.font = &lv_font_roboto_16;
-    /*The vertical padding of the released button is applied to all buttons*/
-		style_tv_btn_rel.body.padding.left   = LV_DPI / PADDING_RATE;
-    style_tv_btn_rel.body.padding.right  = LV_DPI / PADDING_RATE;
-    style_tv_btn_rel.body.padding.top    = LV_DPI / PADDING_RATE;
-    style_tv_btn_rel.body.padding.bottom = LV_DPI / PADDING_RATE;
-
-		style_tv_btn_rel.body.main_color     = lv_color_hex3(0x222); //lv_color_make(0x76, 0xa2, 0xd0);
-    style_tv_btn_rel.body.grad_color     = lv_color_hex3(0x222); //lv_color_make(0x19, 0x3a, 0x5d);
-    style_tv_btn_rel.body.radius         = 0; //LV_DPI / 15;
-    // style_tv_btn_rel.body.padding.left   = LV_DPI / 4;
-    // style_tv_btn_rel.body.padding.right  = LV_DPI / 4;
-    // style_tv_btn_rel.body.padding.top    = LV_DPI / 6;
-    // style_tv_btn_rel.body.padding.bottom = LV_DPI / 20;
-    // style_tv_btn_rel.body.padding.inner  = LV_DPI / 10;
-    style_tv_btn_rel.body.border.color   = LV_COLOR_GRAY; //lv_color_make(0x0b, 0x19, 0x28);
-    style_tv_btn_rel.body.border.width   = LV_DPI / 50 >= 1 ? LV_DPI / 50 : 1;
-    style_tv_btn_rel.body.border.opa     = LV_OPA_10; //LV_OPA_70;
-    style_tv_btn_rel.body.shadow.color   = LV_COLOR_GRAY;
-    style_tv_btn_rel.body.shadow.width   = 0;
-    style_tv_btn_rel.text.color          = lv_color_hex3(0xDDD); //lv_color_make(0xff, 0xff, 0xff);
-    style_tv_btn_rel.image.color         = lv_color_hex3(0xDDD); //lv_color_make(0xff, 0xff, 0xff);
-
-		/*Create a Tab view object*/
-    lv_obj_t *tabview;
-    tabview = lv_tabview_create(lv_scr_act(), NULL);
-		lv_tabview_set_style(tabview, LV_TABVIEW_STYLE_BTN_REL, &style_tv_btn_rel);
-#else
 		/*Create a Tab view object*/
 		lv_obj_t *tabview;
     tabview = lv_tabview_create(lv_scr_act(), NULL);
@@ -352,8 +353,6 @@ void lv_ex_tabview_1(void)
     // pStyle_tv_indi->body.grad_color = LV_COLOR_ORANGE;
     // pStyle_tv_indi->body.padding.inner = LV_DPI / 16;
 		// lv_tabview_set_style(tabview, LV_TABVIEW_STYLE_INDIC, pStyle_tv_indi);
-
-#endif
 
 		// lv_coord_t hres = lv_disp_get_hor_res(NULL);
     // lv_coord_t vres = lv_disp_get_ver_res(NULL);
@@ -409,7 +408,6 @@ void lv_test_tabview_1(void)
     tab = lv_tabview_get_tab(tv2, 1);
     label = lv_label_create(tab, NULL);
     lv_label_set_text(label, "This is the second tab");
-
 
     /*Create styles*/
     static lv_style_t bg;
@@ -486,6 +484,7 @@ void lv_test_tabview_1(void)
 LV_IMG_DECLARE(img_bubble_pattern)
 
 lv_obj_t *tabview;
+static bool tri_design(lv_obj_t * obj, const lv_area_t * mask, lv_design_mode_t mode);
 
 void my_test_temperature(void)
 {
@@ -529,9 +528,11 @@ void my_test_temperature(void)
 		lv_tabview_set_style(tabview, LV_TABVIEW_STYLE_INDIC, &indic);
 
 		/*Add 3 tabs (the tabs are page (lv_page) and can be scrolled*/
-    lv_obj_t *tab1 = lv_tabview_add_tab(tabview, "air cond");
-    lv_obj_t *tab2 = lv_tabview_add_tab(tabview, "gps");
-    lv_obj_t *tab3 = lv_tabview_add_tab(tabview, "weather");
+
+		// lv_obj_t *tab1 = lv_tabview_add_tab(tabview, "air cond");
+    lv_obj_t *tab1 = lv_tabview_add_tab(tabview, LV_SYMBOL_HOME);
+    lv_obj_t *tab2 = lv_tabview_add_tab(tabview, LV_SYMBOL_GPS);
+    lv_obj_t *tab3 = lv_tabview_add_tab(tabview, LV_SYMBOL_BATTERY_FULL);
 
     /*Add content to the tabs*/
     // lv_obj_t * label = lv_label_create(tab1, NULL);
@@ -674,6 +675,127 @@ void my_test_temperature(void)
 		lv_obj_t * gps_symbol3 = lv_label_create(tab2, NULL);
     lv_label_set_text(gps_symbol3, LV_SYMBOL_STOP "25");
     lv_obj_align(gps_symbol3, NULL, LV_ALIGN_IN_TOP_LEFT, 100, 75);
+
+		// tab3
+
+		// // canvas
+		// static lv_style_t canvas_style;
+		// lv_style_copy(&canvas_style, &lv_style_plain);
+		// canvas_style.body.main_color = LV_COLOR_CYAN;
+		// canvas_style.body.grad_color = LV_COLOR_MAROON;
+		// canvas_style.body.radius = 4;
+		// canvas_style.body.border.width = 2;
+		// canvas_style.body.border.color = LV_COLOR_WHITE;
+		// canvas_style.body.shadow.color = LV_COLOR_WHITE;
+		// canvas_style.body.shadow.width = 4;
+		// canvas_style.line.width = 2;
+		// canvas_style.line.color = LV_COLOR_BLACK;
+		// canvas_style.text.color = LV_COLOR_BLUE;
+		//
+		// #define CANVAS_WIDTH  50
+		// #define CANVAS_HEIGHT  50
+		//
+		// static lv_color_t cbuf[LV_CANVAS_BUF_SIZE_TRUE_COLOR(CANVAS_WIDTH, CANVAS_HEIGHT)];
+		//
+		// lv_obj_t * canvas = lv_canvas_create(tab3, NULL);
+		// lv_canvas_set_buffer(canvas, cbuf, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR);
+		// lv_obj_align(canvas, NULL, LV_ALIGN_CENTER, 0, 0);
+		// lv_canvas_fill_bg(canvas, LV_COLOR_SILVER);
+		//
+		// lv_canvas_draw_rect(canvas, 70, 60, 100, 70, &canvas_style);
+
+		static lv_style_t area_bg;
+    lv_style_copy(&area_bg, &lv_style_pretty);
+		// area_bg.glass      = 1;
+		area_bg.body.main_color = lv_color_hex(0x22B6AC);
+		area_bg.body.grad_color = lv_color_hex(0x22B6AC);
+
+    static lv_style_t area_indic;
+    lv_style_copy(&area_indic, &lv_style_pretty);
+    area_indic.body.main_color = LV_COLOR_RED;
+    area_indic.body.grad_color = LV_COLOR_MAROON;
+    area_indic.body.shadow.color = LV_COLOR_RED;
+    area_indic.body.shadow.width = 20;
+    area_indic.body.padding.top = 10;       /*Set the padding around the indicator*/
+    area_indic.body.padding.bottom = 3;
+    area_indic.body.padding.left = 3;
+    area_indic.body.padding.right = 10;
+
+		lv_obj_t * area1 = lv_bar_create(tab3, NULL);
+    lv_obj_set_size(area1, 200, 100);
+    lv_obj_align(area1, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 60);
+		lv_bar_set_style(area1, LV_BAR_STYLE_BG, &area_bg);
+    lv_bar_set_style(area1, LV_BAR_STYLE_INDIC, &area_indic);
+    lv_bar_set_value(area1, 0, false); // bar, new_value, LV_ANIM_ON/OFF
+
+		/*Create an array for the points of the line*/
+		// refs
+    // static lv_point_t line_points[] = { {5, 110}, {5, 60}, {55, 60} };
+		// static lv_point_t line_points2[] = { {155, 160}, {205, 160}, {205, 110} };
+		static lv_point_t line_points[] = { {5, 60}, {205, 60}, {205, 160}, {5, 160}, {5, 60} };
+    static lv_style_t style_line;
+    lv_style_copy(&style_line, &lv_style_plain);
+    // style_line.line.color = LV_COLOR_MAKE(0x00, 0x3b, 0x75);
+		style_line.line.color = LV_COLOR_CYAN;
+    style_line.line.width = 3;
+    style_line.line.rounded = 1;
+    lv_obj_t * line1;
+    line1 = lv_line_create(tab3, NULL);
+    // lv_line_set_points(line1, line_points, 3);     /*Set the points*/
+		lv_line_set_points(line1, line_points, 5);     /*Set the points*/
+    lv_line_set_style(line1, LV_LINE_STYLE_MAIN, &style_line);
+    lv_obj_align(line1, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
+		// lv_obj_t * line2;
+		// line2 = lv_line_create(tab3, NULL);
+    // lv_line_set_points(line2, line_points2, 3);     /*Set the points*/
+    // lv_line_set_style(line2, LV_LINE_STYLE_MAIN, &style_line);
+    // lv_obj_align(line2, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
+
+		static lv_style_t batt_lv_style; //battery level style
+		static lv_style_t batt_lv_style2; //battery value style
+    lv_style_copy(&batt_lv_style, &lv_style_btn_rel);
+    batt_lv_style.text.font = &lv_font_roboto_28;
+		lv_style_copy(&batt_lv_style, &lv_style_btn_rel);
+		lv_style_copy(&batt_lv_style2, &batt_lv_style);
+		batt_lv_style.text.color = LV_COLOR_CYAN;
+		batt_lv_style2.text.color = LV_COLOR_CYAN;
+
+    lv_obj_t * label_batt_level =  lv_label_create(tab3, NULL);
+    lv_label_set_text(label_batt_level, "BATTERY LEVEL");
+    lv_label_set_align(label_batt_level,LV_LABEL_ALIGN_CENTER);
+    lv_obj_align(label_batt_level, NULL, LV_ALIGN_IN_TOP_LEFT, 20, 80);
+		lv_label_set_style(label_batt_level, LV_CONT_STYLE_MAIN,  &batt_lv_style);
+
+		lv_obj_t * label_level_value =  lv_label_create(tab3, NULL);
+    lv_label_set_text(label_level_value, " 88%");
+    lv_obj_align(label_level_value, label_batt_level, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
+		lv_label_set_style(label_level_value, LV_CONT_STYLE_MAIN,  &batt_lv_style2);
+
+
+		// static lv_style_t *pbatt_lv_style;
+		// pbatt_lv_style = lv_label_get_style(label_batt_level, LV_LABEL_STYLE_MAIN);
+		// pbatt_lv_style->text.font = &lv_font_roboto_28;
+		// pbatt_lv_style->body.main_color = LV_COLOR_WHITE;
+		// pbatt_lv_style->body.grad_color = LV_COLOR_WHITE;
+		// static lv_style_t batt_lv_style2;
+    // lv_style_copy(&batt_lv_style2, pbatt_lv_style);
+		// batt_lv_style2.body.main_color = LV_COLOR_CYAN;
+		// batt_lv_style2.body.grad_color = LV_COLOR_CYAN;
+
+		lv_obj_t * batt_symbol = lv_label_create(tab3, NULL);
+    lv_label_set_text(batt_symbol, LV_SYMBOL_BATTERY_3);
+    lv_obj_align(batt_symbol, NULL, LV_ALIGN_IN_TOP_LEFT, 100, 20);
+
+		lv_obj_t * batt_label =  lv_label_create(tab3, NULL);
+    lv_label_set_text(batt_label, "88%");
+    lv_obj_align(batt_label, batt_symbol, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+		// other symbols, see https://docs.littlevgl.com/en/html/overview/font.html
+
+		// #define LV_SYMBOL_BATTERY_FULL    "\xef\x89\x80"
+		// #define LV_SYMBOL_BATTERY_3       "\xef\x89\x81"
+		// #define LV_SYMBOL_BATTERY_2       "\xef\x89\x82"
+		// #define LV_SYMBOL_BATTERY_1       "\xef\x89\x83"
+		// #define LV_SYMBOL_BATTERY_EMPTY   "\xef\x89\x84"
 
 
 		/*Create a style for the LED*/
