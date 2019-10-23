@@ -707,8 +707,8 @@ void my_test_temperature(void)
 		static lv_style_t area_bg;
     lv_style_copy(&area_bg, &lv_style_pretty);
 		// area_bg.glass      = 1;
-		area_bg.body.main_color = lv_color_hex(0x22B6AC);
-		area_bg.body.grad_color = lv_color_hex(0x22B6AC);
+		area_bg.body.main_color = lv_color_hex(0x012E43);
+		area_bg.body.grad_color = lv_color_hex(0x012E43);
 
     static lv_style_t area_indic;
     lv_style_copy(&area_indic, &lv_style_pretty);
@@ -728,28 +728,41 @@ void my_test_temperature(void)
     lv_bar_set_style(area1, LV_BAR_STYLE_INDIC, &area_indic);
     lv_bar_set_value(area1, 0, false); // bar, new_value, LV_ANIM_ON/OFF
 
-		/*Create an array for the points of the line*/
-		// refs
-    // static lv_point_t line_points[] = { {5, 110}, {5, 60}, {55, 60} };
-		// static lv_point_t line_points2[] = { {155, 160}, {205, 160}, {205, 110} };
+		// message outline
 		static lv_point_t line_points[] = { {5, 60}, {205, 60}, {205, 160}, {5, 160}, {5, 60} };
     static lv_style_t style_line;
     lv_style_copy(&style_line, &lv_style_plain);
-    // style_line.line.color = LV_COLOR_MAKE(0x00, 0x3b, 0x75);
-		style_line.line.color = LV_COLOR_CYAN;
-    style_line.line.width = 3;
+		style_line.line.color = lv_color_hex(0x02CDFF); //LV_COLOR_CYAN;
+    style_line.line.width = 2;
     style_line.line.rounded = 1;
     lv_obj_t * line1;
     line1 = lv_line_create(tab3, NULL);
-    // lv_line_set_points(line1, line_points, 3);     /*Set the points*/
 		lv_line_set_points(line1, line_points, 5);     /*Set the points*/
     lv_line_set_style(line1, LV_LINE_STYLE_MAIN, &style_line);
     lv_obj_align(line1, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
-		// lv_obj_t * line2;
-		// line2 = lv_line_create(tab3, NULL);
-    // lv_line_set_points(line2, line_points2, 3);     /*Set the points*/
-    // lv_line_set_style(line2, LV_LINE_STYLE_MAIN, &style_line);
-    // lv_obj_align(line2, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
+
+		static lv_style_t style_batt_bar;
+    lv_style_copy(&style_batt_bar, &lv_style_pretty);
+		style_batt_bar.body.main_color = lv_color_hex(0x005F7B);
+		style_batt_bar.body.grad_color = lv_color_hex(0x005F7B);
+
+    static lv_style_t batt_bar_indic;
+    lv_style_copy(&batt_bar_indic, &lv_style_pretty);
+    batt_bar_indic.body.main_color = lv_color_hex(0x02CDFF);
+    batt_bar_indic.body.grad_color = lv_color_hex(0x02CDFF);
+    batt_bar_indic.body.shadow.color = LV_COLOR_RED;
+    batt_bar_indic.body.shadow.width = 0;
+    batt_bar_indic.body.padding.top = 0;       /*Set the padding around the indicator*/
+    batt_bar_indic.body.padding.bottom = 0;
+    batt_bar_indic.body.padding.left = 0;
+    batt_bar_indic.body.padding.right = 0;
+
+		lv_obj_t * batt_bar = lv_bar_create(tab3, NULL);
+    lv_obj_set_size(batt_bar, 150, 30);
+    lv_obj_align(batt_bar, NULL, LV_ALIGN_IN_TOP_LEFT, 20, 120);
+		lv_bar_set_style(batt_bar, LV_BAR_STYLE_BG, &style_batt_bar);
+    lv_bar_set_style(batt_bar, LV_BAR_STYLE_INDIC, &batt_bar_indic);
+    lv_bar_set_value(batt_bar, 80, false); // bar, new_value, LV_ANIM_ON/O
 
 		static lv_style_t batt_lv_style; //battery level style
 		static lv_style_t batt_lv_style2; //battery value style
@@ -757,8 +770,8 @@ void my_test_temperature(void)
     batt_lv_style.text.font = &lv_font_roboto_28;
 		lv_style_copy(&batt_lv_style, &lv_style_btn_rel);
 		lv_style_copy(&batt_lv_style2, &batt_lv_style);
-		batt_lv_style.text.color = LV_COLOR_CYAN;
-		batt_lv_style2.text.color = LV_COLOR_CYAN;
+		batt_lv_style.text.color = lv_color_hex(0x00D2FF); //LV_COLOR_CYAN;
+		batt_lv_style2.text.color = lv_color_hex(0x00D2FF); //LV_COLOR_CYAN;
 
     lv_obj_t * label_batt_level =  lv_label_create(tab3, NULL);
     lv_label_set_text(label_batt_level, "BATTERY LEVEL");
@@ -771,32 +784,9 @@ void my_test_temperature(void)
     lv_obj_align(label_level_value, label_batt_level, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
 		lv_label_set_style(label_level_value, LV_CONT_STYLE_MAIN,  &batt_lv_style2);
 
-
-		// static lv_style_t *pbatt_lv_style;
-		// pbatt_lv_style = lv_label_get_style(label_batt_level, LV_LABEL_STYLE_MAIN);
-		// pbatt_lv_style->text.font = &lv_font_roboto_28;
-		// pbatt_lv_style->body.main_color = LV_COLOR_WHITE;
-		// pbatt_lv_style->body.grad_color = LV_COLOR_WHITE;
-		// static lv_style_t batt_lv_style2;
-    // lv_style_copy(&batt_lv_style2, pbatt_lv_style);
-		// batt_lv_style2.body.main_color = LV_COLOR_CYAN;
-		// batt_lv_style2.body.grad_color = LV_COLOR_CYAN;
-
 		lv_obj_t * batt_symbol = lv_label_create(tab3, NULL);
     lv_label_set_text(batt_symbol, LV_SYMBOL_BATTERY_3);
     lv_obj_align(batt_symbol, NULL, LV_ALIGN_IN_TOP_LEFT, 100, 20);
-
-		lv_obj_t * batt_label =  lv_label_create(tab3, NULL);
-    lv_label_set_text(batt_label, "88%");
-    lv_obj_align(batt_label, batt_symbol, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
-		// other symbols, see https://docs.littlevgl.com/en/html/overview/font.html
-
-		// #define LV_SYMBOL_BATTERY_FULL    "\xef\x89\x80"
-		// #define LV_SYMBOL_BATTERY_3       "\xef\x89\x81"
-		// #define LV_SYMBOL_BATTERY_2       "\xef\x89\x82"
-		// #define LV_SYMBOL_BATTERY_1       "\xef\x89\x83"
-		// #define LV_SYMBOL_BATTERY_EMPTY   "\xef\x89\x84"
-
 
 		/*Create a style for the LED*/
     // static lv_style_t style_led;
