@@ -1,11 +1,4 @@
-/* SPI Master example
-
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
-*/
+// Tab switcher example
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,13 +9,13 @@
 #include "driver/gpio.h"
 #include "lvgl/lvgl.h"
 #include "lv_examples/lv_apps/demo/demo.h"
-#include "lv_examples/lv_apps/sysmon/sysmon.h" //+:daiki
-#include "lv_examples/lv_apps/terminal/terminal.h" //+:daiki
-#include "lv_examples/lv_tests/lv_test_objx/lv_test_bar/lv_test_bar.h" //+:daiki
-#include "lv_examples/lv_tests/lv_test_theme/lv_test_theme_1.h" //+:daiki
-#include "lvgl/src/lv_themes/lv_theme.h" //+:daiki
-#include "lv_examples/lv_tutorial/4_themes/lv_tutorial_themes.h" //+:daiki
-#include "lv_examples/lv_tests/lv_test_theme/lv_test_theme_2.h" //+:daiki
+#include "lv_examples/lv_apps/sysmon/sysmon.h"
+#include "lv_examples/lv_apps/terminal/terminal.h"
+#include "lv_examples/lv_tests/lv_test_objx/lv_test_bar/lv_test_bar.h"
+#include "lv_examples/lv_tests/lv_test_theme/lv_test_theme_1.h"
+#include "lvgl/src/lv_themes/lv_theme.h"
+#include "lv_examples/lv_tutorial/4_themes/lv_tutorial_themes.h"
+#include "lv_examples/lv_tests/lv_test_theme/lv_test_theme_2.h"
 
 #include "esp_freertos_hooks.h"
 
@@ -33,13 +26,17 @@
 
 #include "lv_font.h"
 
+#define PADDING_RATE 20
+
+LV_IMG_DECLARE(img_bubble_pattern)
+
 static void IRAM_ATTR lv_tick_task(void);
 
 static void tab_switcher(lv_task_t * task);
 
 lv_obj_t * gauge;
-
-#define PADDING_RATE 20
+// lv_obj_t * tabview;
+lv_obj_t * tabv_obj;
 
 typedef struct _message_frame_t
 {
@@ -48,24 +45,65 @@ typedef struct _message_frame_t
 		lv_point_t line_points[5];
 } message_frame_t;
 
+void my_tab_test(void);
 void create_home_condition_tabview(lv_obj_t *tabview);
 void create_gps_condition_tabview(lv_obj_t *tabview);
 void create_battery_condition_tabview(lv_obj_t *tabview);
 void create_message_frame(message_frame_t *obj, lv_obj_t *tabview, int start_x, int start_y, int width, int height);
 
-LV_IMG_DECLARE(img_bubble_pattern)
+void app_main()
+{
+	lv_init();
 
-lv_obj_t *tabview;
+	disp_spi_init();
+	ili9341_init();
+
+#if ENABLE_TOUCH_INPUT
+	tp_spi_init();
+	xpt2046_init();
+#endif
+
+  static lv_color_t buf1[DISP_BUF_SIZE];
+  static lv_color_t buf2[DISP_BUF_SIZE];
+  static lv_disp_buf_t disp_buf;
+  lv_disp_buf_init(&disp_buf, buf1, buf2, DISP_BUF_SIZE);
+
+	lv_disp_drv_t disp_drv;
+	lv_disp_drv_init(&disp_drv);
+	disp_drv.flush_cb = ili9341_flush;
+	disp_drv.buffer = &disp_buf;
+	lv_disp_drv_register(&disp_drv);
+
+  // Set TOUCH_SUPPORT on drv\component.mk to 1 if
+  // your board have touch support
+#if ENABLE_TOUCH_INPUT
+  lv_indev_drv_t indev_drv;
+  lv_indev_drv_init(&indev_drv);
+  indev_drv.read_cb = xpt2046_read;
+  indev_drv.type = LV_INDEV_TYPE_POINTER;
+  lv_indev_drv_register(&indev_drv);
+#endif
+
+	esp_register_freertos_tick_hook(lv_tick_task);
+
+	my_tab_test(); // start example application
+	lv_task_create(tab_switcher, 3000, LV_TASK_PRIO_MID, tabv_obj); // start timer switching tab
+
+	while(1) {
+		vTaskDelay(1);
+		lv_task_handler();
+	}
+}
 
 void my_tab_test(void)
 {
 
 		lv_theme_t *theme = lv_theme_alien_init(90, NULL);
 		lv_theme_set_current(theme);
-		tabview = lv_tabview_create(lv_scr_act(), NULL);
+		tabv_obj = lv_tabview_create(lv_scr_act(), NULL);
 
 		static lv_style_t *pStyle_tv_btn_rel; //button release style
-		pStyle_tv_btn_rel = (lv_style_t *)lv_tabview_get_style(tabview, LV_TABVIEW_STYLE_BTN_REL);
+		pStyle_tv_btn_rel = (lv_style_t *)lv_tabview_get_style(tabv_obj, LV_TABVIEW_STYLE_BTN_REL);
 		pStyle_tv_btn_rel->body.padding.left   = LV_DPI / PADDING_RATE;
 		pStyle_tv_btn_rel->body.padding.right  = LV_DPI / PADDING_RATE;
 		pStyle_tv_btn_rel->body.padding.top    = LV_DPI / PADDING_RATE;
@@ -77,17 +115,30 @@ void my_tab_test(void)
 		indic.body.main_color = lv_color_hsv_to_rgb(90, 80, 87); //color for theme alien
 		indic.body.grad_color = lv_color_hsv_to_rgb(90, 80, 87); //color for theme alien
 		indic.body.padding.inner = LV_DPI / 16;
-		lv_tabview_set_style(tabview, LV_TABVIEW_STYLE_INDIC, &indic);
+		lv_tabview_set_style(tabv_obj, LV_TABVIEW_STYLE_INDIC, &indic);
 
 		//Add 3 tabs
-    lv_obj_t *tab1 = lv_tabview_add_tab(tabview, LV_SYMBOL_HOME);
-    lv_obj_t *tab2 = lv_tabview_add_tab(tabview, LV_SYMBOL_BATTERY_FULL);
-    lv_obj_t *tab3 = lv_tabview_add_tab(tabview, LV_SYMBOL_GPS);
+    lv_obj_t *tab1 = lv_tabview_add_tab(tabv_obj, LV_SYMBOL_HOME);
+    lv_obj_t *tab2 = lv_tabview_add_tab(tabv_obj, LV_SYMBOL_BATTERY_FULL);
+    lv_obj_t *tab3 = lv_tabview_add_tab(tabv_obj, LV_SYMBOL_GPS);
 
 		create_home_condition_tabview(tab1);
 		create_battery_condition_tabview(tab2);
 		create_gps_condition_tabview(tab3);
 
+}
+
+static void tab_switcher(lv_task_t * task)
+{
+    static uint8_t tab = 0;
+    tab++;
+    if(tab >= 3) tab = 0;
+    lv_tabview_set_tab_act(tabv_obj, tab, true);
+}
+
+static void IRAM_ATTR lv_tick_task(void)
+{
+	lv_tick_inc(portTICK_RATE_MS);
 }
 
 void create_home_condition_tabview(lv_obj_t *tabview)
@@ -465,63 +516,4 @@ void create_battery_condition_tabview(lv_obj_t *tabview)
 	lv_label_set_text(label_level_value, " 88%");
 	lv_obj_align(label_level_value, label_batt_level, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
 	lv_label_set_style(label_level_value, LV_CONT_STYLE_MAIN,  &batt_lv_style2);
-}
-
-void app_main()
-{
-	lv_init();
-
-	disp_spi_init();
-	ili9341_init();
-
-#if ENABLE_TOUCH_INPUT
-	tp_spi_init();
-	xpt2046_init();
-#endif
-
-  static lv_color_t buf1[DISP_BUF_SIZE];
-  static lv_color_t buf2[DISP_BUF_SIZE];
-  static lv_disp_buf_t disp_buf;
-  lv_disp_buf_init(&disp_buf, buf1, buf2, DISP_BUF_SIZE);
-
-	lv_disp_drv_t disp_drv;
-	lv_disp_drv_init(&disp_drv);
-	disp_drv.flush_cb = ili9341_flush;
-	disp_drv.buffer = &disp_buf;
-	lv_disp_drv_register(&disp_drv);
-
-  // Set TOUCH_SUPPORT on drv\component.mk to 1 if
-  // your board have touch support
-#if ENABLE_TOUCH_INPUT
-  lv_indev_drv_t indev_drv;
-  lv_indev_drv_init(&indev_drv);
-  indev_drv.read_cb = xpt2046_read;
-  indev_drv.type = LV_INDEV_TYPE_POINTER;
-  lv_indev_drv_register(&indev_drv);
-#endif
-
-	esp_register_freertos_tick_hook(lv_tick_task);
-
-  // start example application
-	my_tab_test();
-	// start timer switching tab
-	lv_task_create(tab_switcher, 3000, LV_TASK_PRIO_MID, tabview);
-
-	while(1) {
-		vTaskDelay(1);
-		lv_task_handler();
-	}
-}
-
-static void tab_switcher(lv_task_t * task)
-{
-    static uint8_t tab = 0;
-    tab++;
-    if(tab >= 3) tab = 0;
-    lv_tabview_set_tab_act(tabview, tab, true);
-}
-
-static void IRAM_ATTR lv_tick_task(void)
-{
-	lv_tick_inc(portTICK_RATE_MS);
 }
