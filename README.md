@@ -72,7 +72,7 @@ and `components/drv/ili9341.h` to:
 #define ILI9341_INVERT_DISPLAY 1
 ```
 
-### Flash to ESP32
+## Flash to ESP32
 1. Go to the project's directory: `cd esp-idf-littlevgl-sample`
 2. Build the project: `make`
 3. Upload the application to your board: `make flash`
