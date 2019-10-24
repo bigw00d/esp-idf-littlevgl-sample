@@ -25,7 +25,10 @@ Rename `lvgl_component.mk` to `component.mk` and move it to the `lvgl` directory
 
 [ESPr® Developer 32](https://www.switch-science.com/catalog/3210/)
 
+## LCD Board
 
+[TFT LCD Touch Screen Tutorial (2.8" ILI9341 Driver)](https://www.amazon.co.jp/HiLetgo%C2%AE-LCD%E3%83%87%E3%82%A3%E3%82%B9%E3%83%97%E3%83%AC%E3%82%A4-%E3%82%BF%E3%83%83%E3%83%81%E3%83%91%E3%83%8D%E3%83%AB-SPI%E3%82%B7%E3%83%AA%E3%82%A2%E3%83%AB240-ILI9341/dp/B072N551V3/ref=cm_cr_arp_d_product_top?ie=UTF8)
+ 
 ##  Pin connections
 |ESP32  |LCD  |
 |---|---|
