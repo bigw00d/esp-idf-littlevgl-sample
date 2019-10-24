@@ -1,5 +1,12 @@
 # LittlevGL example for ESP32
 
+Examples for LittlevGL applications(mock-up).
+
+<img width="75%" src="./ESP32_DSLite_Mockup.png" />  
+
+<img width="33%" align="left" src="./01_temp.jpg">
+<img width="33%" align="center" src="./02_battery.jpg">
+<img width="33%" align="right" src="./03_gps.jpg">
 
 ## Get started 
 ### Install the ESP32 SDK
