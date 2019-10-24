@@ -7,8 +7,8 @@ Examples for LittlevGL applications(mock-up).
 <img width="25%" src="./01_temp.jpg"> <img width="25%" src="./02_battery.jpg"> <img width="25%" src="./03_gps.jpg">
 
 ## Get started 
-### Install the ESP32 SDK
-1. Get base projects: `git clone --recursive https://github.com/bigw00d/esp-idf-littlevgl-sample.git`
+### Get project files
+`git clone --recursive https://github.com/bigw00d/esp-idf-littlevgl-sample.git`
 
 ### Add LittlevGL to the build
 To link LittlevGL (lvgl) and lv_examples with ESP-IDF you need to add a **component.mk** file to each directory.
